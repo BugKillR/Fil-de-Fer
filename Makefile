@@ -1,46 +1,57 @@
-NAME	= FdF.a
+# ---------- Targets ----------
+NAME        = FdF.a          # senin statik arşivin
+EXE         = fdf            # çalıştırılabilir
 
-CC		= cc
-CFLAGS	= -Wall -Wextra -Werror
+# ---------- Toolchain ----------
+CC          = cc
+CFLAGS      = -Wall -Wextra -Werror \
+              -I$(LIBFT_DIR) -I$(MLX_DIR)
 
-SRCS	= helper1.c
-OBJS	= $(SRCS:.c=.o)
+# ---------- Sources ----------
+SRCS        = helper1.c          # kendi kaynakların (main HARİÇ)
+MAIN        = main.c
+OBJS        = $(SRCS:.c=.o)
 
-# ---- Libft ----
-LIBFT_DIR	= ./Libft
-LIBFT		= $(LIBFT_DIR)/libft.a
+# ---------- Libft ----------
+LIBFT_DIR   = ./Libft
+LIBFT       = $(LIBFT_DIR)/libft.a
 
-# ---- MiniLibX (Linux) ----
+# ---------- MiniLibX (Linux) ----------
+MLX_DIR     = ./minilibx-linux
+MLX_LIB     = $(MLX_DIR)/libmlx_Linux.a
 
-MLX_DIR		= ./minilibx-linux
+# X11 / zlib / math
+SYS_LIBS    = -lXext -lX11 -lm -lz
 
-UNAME		= $(shell uname)
-NAME_UNAME	= libmlx_$(UNAME).a
+# --------------------------------------
 
-MLX			= $(MLX_DIR)/libmlx_Linux.a
-MLX_FLAGS	= -L$(MLX_DIR) -lmlx_Linux -lXext -lX11 -lm -lz
+all: $(EXE)
 
-all: $(NAME)
-	$(CC) $(CFLAGS) $(MLX_FLAGS) main.c *.a -o fdf
+$(EXE): $(MAIN:.c=.o) $(NAME) $(MLX_LIB)
+	$(CC) $(CFLAGS) $^ $(SYS_LIBS) -o $@
 
-$(NAME): $(OBJS) $(LIBFT) $(MLX)
-	ar rcs $(NAME) $(OBJS) $(LIBFT_DIR)/*.o $(MLX_DIR)/obj/*.o
+$(NAME): $(OBJS) $(LIBFT)
+	ar rcs $@ $(OBJS) $(LIBFT_DIR)/*.o
+
+# Genel pattern rule (istersen bırakabilirsin; yoksa cc default pattern'i kullanır)
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT):
-	make -C $(LIBFT_DIR) all
+	$(MAKE) -C $(LIBFT_DIR) all
 
-$(MLX):
-	make -C $(MLX_DIR) all
+$(MLX_LIB):
+	$(MAKE) -C $(MLX_DIR) all
 
 clean:
-	make -C $(MLX_DIR) clean
-	make -C $(LIBFT_DIR) clean
-	rm -rf $(OBJS)
+	$(MAKE) -C $(LIBFT_DIR) clean
+	$(MAKE) -C $(MLX_DIR) clean
+	rm -f $(OBJS) $(MAIN:.c=.o)
 
 fclean: clean
-	make -C $(LIBFT_DIR) fclean
-	rm -rf $(MLX_DIR)/$(NAME_UNAME)
-	rm -rf $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) fclean
+	rm -f $(EXE) $(NAME)
+	rm -f $(MLX_LIB) $(MLX_DIR)/libmlx_*.a
 
 re: fclean all
 
