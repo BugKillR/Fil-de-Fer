@@ -1,6 +1,6 @@
 # ---------- Targets ----------
-NAME        = FdF.a          # senin statik arşivin
-EXE         = fdf            # çalıştırılabilir
+NAME        = FdF.a
+EXE         = fdf
 
 # ---------- Toolchain ----------
 CC          = cc
@@ -8,7 +8,12 @@ CFLAGS      = -Wall -Wextra -Werror \
               -I$(LIBFT_DIR) -I$(MLX_DIR)
 
 # ---------- Sources ----------
-SRCS        = helper1.c          # kendi kaynakların (main HARİÇ)
+SRCS        = instantiate_mlx.c \
+				settings.c \
+				render.c \
+				input.c \
+				draw.c \
+				free.c
 MAIN        = main.c
 OBJS        = $(SRCS:.c=.o)
 
@@ -33,7 +38,6 @@ $(EXE): $(MAIN:.c=.o) $(NAME) $(MLX_LIB)
 $(NAME): $(OBJS) $(LIBFT)
 	ar rcs $@ $(OBJS) $(LIBFT_DIR)/*.o
 
-# Genel pattern rule (istersen bırakabilirsin; yoksa cc default pattern'i kullanır)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
