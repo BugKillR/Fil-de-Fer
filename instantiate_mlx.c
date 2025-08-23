@@ -5,6 +5,7 @@ void    instantiate(void *param, int width, int height, char *title)
     t_data  *data;
 
     data = (t_data *)param;
+    data->settings = (t_settings *)malloc(sizeof(t_settings));
     data->mlx = mlx_init();
     data->win = mlx_new_window(data->mlx, width, height, title);
     data->img = mlx_new_image(data->mlx, width, height);

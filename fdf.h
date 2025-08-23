@@ -1,6 +1,8 @@
 #ifndef FDF_H
 # define FDF_H
 # include "./minilibx-linux/mlx.h"
+# include "./Libft/libft.h"
+# include "./get_next_line/get_next_line.h"
 # include <stdlib.h>
 # include <math.h>
 
@@ -22,17 +24,21 @@ typedef struct s_settings
 
 typedef struct s_data
 {
-	void	*mlx;
-	void	*win;
-	void	*img;
-	char	*addr;
-	int		line_len;
-	int		endian;
-	int		bpp;
+	void		*mlx;
+	void		*win;
+	void		*img;
+	char		*addr;
+	int			line_len;
+	int			endian;
+	int			bpp;
 
 	// Move image
-	int		abscissa;
-	int		ordinate;
+	int			abscissa;
+	int			ordinate;
+
+	// Settings
+
+	t_settings	*settings;
 }				t_data;
 
 //	----- Instantiate -----
@@ -46,7 +52,7 @@ void	draw(t_data *data);
 
 //	----- Input -----
 
-int	keybinds(int keycode, void *maindata, void *rules);
+int	keybinds(int keycode, void *param);
 
 //	----- Render -----
 

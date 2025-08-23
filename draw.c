@@ -4,7 +4,7 @@ void	put_pixel(t_data *data, int x, int y, int color)
 {
 	char	*pixel;
 
-	pixel = data->addr + ((y + data->ordinate) * data->line_len) + ((x + data->abscissa) * (data->bpp / 8));
+	pixel = data->addr + (y  * data->line_len) + (x * (data->bpp / 8));
 	*(unsigned int *)pixel = color;
 }
 

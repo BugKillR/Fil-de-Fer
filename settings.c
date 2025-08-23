@@ -2,11 +2,11 @@
 
 void	options(void *param, int ordinate, int abscissa)
 {
-	t_settings	*settings;
+	t_data		*data;
 
 	if (!param)
 		return ;
-	settings = (t_settings *)param;
-	settings->abscissa = abscissa;
-	settings->ordinate = ordinate;
+	data = (t_data*)param;
+	data->settings->abscissa = abscissa;
+	data->settings->ordinate = ordinate;
 }
